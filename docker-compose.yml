@@ -1,0 +1,13 @@
+version: '3'
+services: 
+    jenkins:
+        image: jenkins/jenkins:lts
+        environment: 
+            USER_CHOCOLATEEN_PASSWORD: pac
+            USER_VAUGIE_G_PASSWORD: vg
+            USER_I_DONT_KNOW_PASSWORD: idk
+            USER_NASSO_PASSWORD: nasso
+        ports: 
+            - "5000:8080"
+        
+        restart: always
