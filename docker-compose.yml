@@ -1,7 +1,9 @@
 version: '3'
 services: 
     jenkins:
-        image: jenkins/jenkins:lts
+        build: ./
+        image: "jenkins-marvin"
+        container_name: marvin-container
         environment: 
             USER_CHOCOLATEEN_PASSWORD: pac
             USER_VAUGIE_G_PASSWORD: vg
@@ -9,5 +11,4 @@ services:
             USER_NASSO_PASSWORD: nasso
         ports: 
             - "5000:8080"
-        
         restart: always
