@@ -1,6 +1,8 @@
 version: '3'
 services: 
     jenkins:
+        privileged: true
+        user: root
         build: ./
         image: "jenkins-marvin"
         container_name: marvin-container
@@ -12,3 +14,8 @@ services:
         ports: 
             - "5000:8080"
         restart: always
+        volumes:
+            - ~/jenkins-volumes:/var/jenkins_home
+            - ./jenkins.yml:/var/jenkins_home/casc_configs/jenkins.yml
+            - /var/run/docker.sock:/var/run/docker.sock
+            - /usr/local/bin/docker:/usr/local/bin/docker
