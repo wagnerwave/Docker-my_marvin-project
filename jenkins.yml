@@ -20,11 +20,10 @@ jenkins:
               - "Job/Workspace"
             assignments:
               - "Jeremy"
+              - "Garance"
           - name: "gorilla"
             description: "Group Obsessively Researching Innovation Linked to Learning and Accomplishment"
             permissions:
-              - "Job/Build"
-              - "Job/Workspace"
               - "Job/Create"
               - "Job/Configure"
               - "Job/Read"
@@ -54,3 +53,9 @@ jenkins:
       - id: "nasso"
         name: "Nassim"
         password: $USER_NASSO_PASSWORD
+jobs:
+  - script: > 
+      folder('Tools') {
+        displayName("Tools")
+          description("Folder for miscellaneous tools.")
+      }
