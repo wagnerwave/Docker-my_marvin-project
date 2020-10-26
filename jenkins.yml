@@ -11,7 +11,6 @@ jenkins:
             permissions:
               - "Overall/Administer"
             assignments:
-              - "admin"
               - "chocolateen"
           - name: "ape"
             description: "Pedagogical team member"
@@ -26,11 +25,13 @@ jenkins:
             description: "Group Obsessively Researching Innovation Linked to Learning and Accomplishment"
             permissions:
               - "Overall/Read"
-              - "Job/Build"
-              - "Job/Workspace"
-              - "Job/Create"
-              - "Job/Configure"
               - "Job/Read"
+              - "Job/Build"
+              - "Job/Cancel"
+              - "Job/Move"
+              - "Job/Workspace"
+              - "Job/Configure"
+              - "Job/Create"
               - "Job/Delete"
             assignments:
               - "vaugie_g"
@@ -87,19 +88,37 @@ jobs:
           stringParam('DISPLAY_NAME', '', 'Display name for the job')
         }
         steps {
-          scm {
-            git('$GITHUB_NAME')
+          dsl {
+            text('''
+              job("$DISPLAY_NAME") {
+                wrappers {
+                  preBuildCleanup {
+                    includePattern('*')
+                    deleteDirectories()
+                    cleanupParameter('CLEANUP')
+                  }
+                }
+                scm {
+                    git {
+                      remote {
+                        url("https://github.com/$GITHUB_NAME")
+                      }
+                    }
+                }
+                triggers {
+                  pollSCM {
+                    scmpoll_spec('*/1 * * * *')
+                  }
+                }
+                steps {
+                  shell('make fclean')
+                  shell('make')
+                  shell('make test')
+                  shell('make clean')
+                }
+              }
+            ''')
           }
-          triggers {
-            pollSCM {
-              scmpoll_spec('* * * * *')
-            }
-          }
-        }
-        steps {
-          shell('make fclean')
-          shell('make')
-          shell('make test')
-          shell('make clean')
         }
       }
+     
